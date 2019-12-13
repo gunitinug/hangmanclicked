@@ -14,9 +14,7 @@ const propTypes = {
 };
 
 const Letters = ({ solution, correct, incorrect, setSolved }) => {
-  const [lettersMap, setLettersMap] = useState(
-    az.map(x => ({ letter: x, value: false })),
-  );
+  const [lettersMap, setLettersMap] = useState(az.map(x => ({ label: x, value: false })));
 
   const updateClickedHandler = letter => {
     setLettersMap({
@@ -28,7 +26,7 @@ const Letters = ({ solution, correct, incorrect, setSolved }) => {
   const playHandler = alphabet => !(solution.split('').indexOf(alphabet) < 0);
 
   const renderedLetters = lettersMap.map((letter, i) => {
-    if (!lettersMap[letter]) {
+    if (letter.value) {
       return (
         <AvailableLetter
           key={i}
@@ -38,7 +36,7 @@ const Letters = ({ solution, correct, incorrect, setSolved }) => {
           correct={() => correct(letter.value)}
           incorrect={() => incorrect(letter.value)}
           solution={solution}
-          alphabet={letter.value}
+          alphabet={letter.label}
         />
       );
     }
