@@ -1,66 +1,58 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { number, func } from 'prop-types';
 import AvailableLetter from './AvailableLetter/AvailableLetter';
 import DisabledLetter from './DisabledLetter/DisabledLetter';
 import classes from './Letters.module.css';
 
-const Letters = (props) => {
-    const [lettersMap, setLettersMap]=useState(
-        {
-            "a":false,"b":false,"c":false,"d":false,"e":false,"f":false,"g":false,"h":false,"i":false,"j":false,"k":false,"l":false,"m":false,"n":false,"o":false,"p":false,"q":false,"r":false,"s":false,"t":false,"u":false,"v":false,"w":false,"x":false,"y":false,"z":false
-        }
-    );
+import { az } from './az.j'; // array of letters a-z
 
-    const updateClickedHandler = (letter) => {
-        setLettersMap(
-            {
-                ...lettersMap,[letter]:true
-            }
-        );
-    };
-    
-    const playHandler = (alphabet) => {
-        const solution = props.solution.split('');
-        console.log(solution);
+const propTypes = {
+  solution: number.isRequired,
+  correct: func.isRequired,
+  incorrect: func.isRequired,
+  setSolved: func.isRequired,
+};
 
-        if (solution.indexOf(alphabet)<0)
-        {
-            console.log('incorrect');
-            return false;
-        }
-        else
-        {
-            console.log('correct');
-            return true;
-        }
+const Letters = ({ solution, correct, incorrect, setSolved }) => {
+  const [lettersMap, setLettersMap] = useState(
+    az.map(x => ({ letter: x, value: false })),
+  );
+
+  const updateClickedHandler = letter => {
+    setLettersMap({
+      ...lettersMap,
+      [letter]: true,
+    });
+  };
+
+  const playHandler = alphabet => !(solution.split('').indexOf(alphabet) < 0);
+
+  const renderedLetters = lettersMap.map((letter, i) => {
+    if (!lettersMap[letter]) {
+      return (
+        <AvailableLetter
+          key={i}
+          updateClicked={updateClickedHandler}
+          setSolved={setSolved}
+          play={() => playHandler(letter.value)}
+          correct={() => correct(letter.value)}
+          incorrect={() => incorrect(letter.value)}
+          solution={solution}
+          alphabet={letter.value}
+        />
+      );
     }
+    return <DisabledLetter alphabet={letter} />;
+  });
 
-    const renderedLetters = Object.keys(lettersMap).map(
-        (letter,i)=>{
-          if (!lettersMap[letter])     //letter is not yet clicked
-          {
-            return (
-                <AvailableLetter updateClicked={updateClickedHandler} setSolved={props.setSolved} play={()=>playHandler(letter)} correct={()=>props.correct(letter)} incorrect={()=>props.incorrect(letter)} solution={props.solution} key={i} alphabet={letter} />
-            )
-          }
-          else                         //letter is clicked
-          {
-            return (
-                <DisabledLetter alphabet={letter} />
-            )
-          }
-        }
-    );
+  return (
+    <div className={classes.Letters}>
+      <p>Solution: {solution}</p>
+      <div className={classes.AvailableLetters}>{renderedLetters}</div>
+    </div>
+  );
+};
 
-    
-
-    return (    
-        <div className={classes.Letters}>
-            <p>Solution: {props.solution}</p>
-            <div className={classes.AvailableLetters}>
-                {renderedLetters}
-            </div>
-        </div>
-    );
-}
+Letters.propTypes = propTypes;
 
 export default Letters;
