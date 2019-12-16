@@ -3,7 +3,7 @@ import Backdrop from './Backdrop/Backdrop';
 import classes from './Modal.module.css';
 
 const modal = (props) => {
-    let show = props.gameOver() || props.solved ? true : false;
+    let show = props.gameOver() || props.checkSolved() ? true : false;
 
     const attachedClasses = [ classes.Message ];
     if (!show) {
@@ -15,7 +15,7 @@ const modal = (props) => {
             <Backdrop show={show} />
             <div className={attachedClasses.join(' ')} >
                 {props.gameOver()?<p>GAME OVER</p>:null}
-                {props.solved?<p>YOU WIN!</p>:null}
+                {props.checkSolved()?<p>YOU WIN!</p>:null}
             </div>
         </div>
     );

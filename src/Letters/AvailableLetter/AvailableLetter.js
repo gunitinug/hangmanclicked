@@ -3,7 +3,6 @@ import classes from './AvailableLetter.module.css';
 import Ax from '../../hoc/Ax';
 
 const AvailableLetter = (props) => {
-
     const setStuff = () => {
       if (props.play()) {
         props.correct();
@@ -12,8 +11,8 @@ const AvailableLetter = (props) => {
         props.incorrect();
       }
 
-      props.updateClicked(props.alphabet);
       props.setSolved();
+      props.updateClicked(props.alphabet);
     };
 
     return (

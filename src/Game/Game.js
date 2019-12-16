@@ -32,6 +32,18 @@ class Game extends Component
         // JSON.stringify(unique) === JSON.stringify(compare)
     };
 
+    // A hack for Modal.js
+    checkSolvedWithoutStateChange = () => {
+        const solution = this.state.solution.replace(/\s/g, '').replace(/-/g, '').split('');
+        const compare = [ ...this.state.correctUsedLetters].sort();
+        const unique = solution.filter(
+            (elem,index,self) => (index===self.indexOf(elem))
+        ).sort();
+
+        const solved = JSON.stringify(unique) === JSON.stringify(compare);
+        return solved;
+    };
+
     gameOverHandler = () => this.state.lives<1;
 
     guessedCorrectHandler = (letter) => {
@@ -88,7 +100,7 @@ class Game extends Component
                     feed={this.state.availableLetters}
                     />
                 </div>
-                <Modal solved={this.state.solved} gameOver={this.gameOverHandler} />
+                <Modal checkSolved={this.checkSolvedWithoutStateChange} gameOver={this.gameOverHandler} />
             </div>
         );
     }

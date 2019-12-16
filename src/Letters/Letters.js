@@ -24,12 +24,12 @@ const Letters = (props) => {
 
         if (solution.indexOf(alphabet)<0)
         {
-            console.log('incorrect');
+            // console.log('incorrect');
             return false;
         }
         else
         {
-            console.log('correct');
+            // console.log('correct');
             return true;
         }
     }
@@ -43,9 +43,9 @@ const Letters = (props) => {
             )
           }
           else                         //letter is clicked
-          {
+          { 
             return (
-                <DisabledLetter alphabet={letter} />
+                <DisabledLetter alphabet={letter} key={i} />
             )
           }
         }
